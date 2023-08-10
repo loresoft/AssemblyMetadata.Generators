@@ -19,7 +19,6 @@
     <Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy)) LoreSoft</Copyright>
     <Authors>LoreSoft</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageTags>orm;sql;micro-orm;database</PackageTags>
     <PackageProjectUrl>https://github.com/loresoft/AssemblyMetadata.Generators</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

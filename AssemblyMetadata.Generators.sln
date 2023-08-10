@@ -7,6 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyMetadata.Generators
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{1BA030F4-6549-4F95-ACEA-80E992C519BD}"
 	ProjectSection(SolutionItems) = preProject
+		coverlet.runsettings = coverlet.runsettings
 		src\Directory.Build.props = src\Directory.Build.props
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		README.md = README.md
