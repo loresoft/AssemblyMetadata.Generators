@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AssemblyMetadata.Generators.Tests": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\..\\test\\AssemblyMetadata.Generators.Tests\\AssemblyMetadata.Generators.Tests.csproj"
+    }
+  }
+}

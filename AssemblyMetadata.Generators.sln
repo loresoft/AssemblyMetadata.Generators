@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyMetadata.Generators", "src\AssemblyMetadata.Generators\AssemblyMetadata.Generators.csproj", "{57C67863-03B3-4E43-8881-7B19A5657FE0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{1BA030F4-6549-4F95-ACEA-80E992C519BD}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyMetadata.Generators.Tests", "test\AssemblyMetadata.Generators.Tests\AssemblyMetadata.Generators.Tests.csproj", "{DF58389E-0A0F-49EB-8FF0-943E85AF3FD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{57C67863-03B3-4E43-8881-7B19A5657FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57C67863-03B3-4E43-8881-7B19A5657FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57C67863-03B3-4E43-8881-7B19A5657FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57C67863-03B3-4E43-8881-7B19A5657FE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF58389E-0A0F-49EB-8FF0-943E85AF3FD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF58389E-0A0F-49EB-8FF0-943E85AF3FD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF58389E-0A0F-49EB-8FF0-943E85AF3FD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF58389E-0A0F-49EB-8FF0-943E85AF3FD0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {17C9AE5B-2227-4FE0-868F-4FDC16F6DD8F}
+	EndGlobalSection
+EndGlobal
