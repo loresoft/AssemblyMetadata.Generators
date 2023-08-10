@@ -61,6 +61,7 @@ public static class AssemblyMetadataWriter
     private static string SafeValue(string value)
     {
         return value
+            .Replace("\\", "\\\\")
             .Replace("\"", "\\\"")
             .Replace(Environment.NewLine, "\\r\\n");
     }

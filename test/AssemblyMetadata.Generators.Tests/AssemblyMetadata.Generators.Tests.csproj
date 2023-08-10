@@ -14,7 +14,7 @@
   <PropertyGroup Label="Package">
     <Description>
       Source generator for project and assembly information
-      as constants in the global "AssemblyMetadata" class
+      as constants in the global "AssemblyMetadata" \ class
     </Description>
     <Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy)) LoreSoft</Copyright>
     <Authors>LoreSoft</Authors>

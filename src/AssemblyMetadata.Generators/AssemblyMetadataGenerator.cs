@@ -52,7 +52,7 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
             if (attribute.ConstructorArguments.Length == 1)
             {
                 // remove Assembly
-                if (name.StartsWith("Assembly"))
+                if (name.Length > 8 && name.StartsWith("Assembly"))
                     name = name.Substring(8);
 
                 // remove Attribute
