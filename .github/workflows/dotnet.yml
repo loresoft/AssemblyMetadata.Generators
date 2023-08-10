@@ -37,7 +37,7 @@ jobs:
       run: dotnet restore
 
     - name: Build Solution
-      run: 'dotnet build --no-restore --configuration Release /p:ContinuousIntegrationBuild=true'
+      run: 'dotnet build --no-restore --configuration Release'
 
     - name: Run Test
       run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" --settings coverlet.runsettings
