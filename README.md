@@ -2,7 +2,7 @@
 
 Source generator to expose assembly attributes as string constants.
 
-[![Build status](https://github.com/loresoft/AssemblyMetadata.Generators/workflows/Build/badge.svg)](https://github.com/loresoft/AssemblyMetadata.Generators/actions)
+[![Build status](https://github.com/loresoft/AssemblyMetadata.Generators/actions/workflows/dotnet.yml/badge.svg)](https://github.com/loresoft/AssemblyMetadata.Generators/actions)
 
 [![NuGet Version](https://img.shields.io/nuget/v/AssemblyMetadata.Generators.svg?style=flat-square)](https://www.nuget.org/packages/AssemblyMetadata.Generators/)
 
