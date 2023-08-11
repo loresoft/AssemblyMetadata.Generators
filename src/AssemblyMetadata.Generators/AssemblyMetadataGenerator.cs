@@ -1,14 +1,37 @@
 using System.Reflection;
+using System.Resources;
+using System.Runtime.Versioning;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace AssemblyMetadata.Generators;
 
 [Generator(LanguageNames.CSharp)]
 public class AssemblyMetadataGenerator : IIncrementalGenerator
 {
+    private static readonly HashSet<string> _attributes = new()
+    {
+        nameof(AssemblyCompanyAttribute),
+        nameof(AssemblyConfigurationAttribute),
+        nameof(AssemblyCopyrightAttribute),
+        nameof(AssemblyCultureAttribute),
+        nameof(AssemblyDelaySignAttribute),
+        nameof(AssemblyDescriptionAttribute),
+        nameof(AssemblyFileVersionAttribute),
+        nameof(AssemblyInformationalVersionAttribute),
+        nameof(AssemblyKeyFileAttribute),
+        nameof(AssemblyKeyNameAttribute),
+        nameof(AssemblyMetadataAttribute),
+        nameof(AssemblyProductAttribute),
+        nameof(AssemblySignatureKeyAttribute),
+        nameof(AssemblyTitleAttribute),
+        nameof(AssemblyTrademarkAttribute),
+        nameof(AssemblyVersionAttribute),
+        nameof(NeutralResourcesLanguageAttribute),
+        nameof(TargetFrameworkAttribute),
+    };
+
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var provider = context.SyntaxProvider
@@ -46,7 +69,7 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
         foreach (var attribute in attributes)
         {
             var name = attribute.AttributeClass?.Name;
-            if (name == null)
+            if (name == null || !_attributes.Contains(name))
                 continue;
 
             if (attribute.ConstructorArguments.Length == 1)
