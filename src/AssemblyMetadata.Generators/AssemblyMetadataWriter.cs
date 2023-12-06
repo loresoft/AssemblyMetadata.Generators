@@ -44,14 +44,13 @@ public static class AssemblyMetadataWriter
         foreach (var constant in constants)
         {
             var name = SafeName(constant.Name);
-            var value = SafeValue(constant.Value);
 
             codeBuilder
                 .Append("public const string ")
                 .Append(name)
-                .Append(" = \"")
-                .Append(value)
-                .AppendLine("\";")
+                .Append(" = ")
+                .Append(constant.Value)
+                .AppendLine(";")
                 .AppendLine();
         }
 
@@ -65,14 +64,6 @@ public static class AssemblyMetadataWriter
     public static string SafeName(string name)
     {
         return ToPropertyName(name.AsSpan());
-    }
-
-    public static string SafeValue(string value)
-    {
-        return value
-            .Replace("\\", "\\\\")
-            .Replace("\"", "\\\"")
-            .Replace(Environment.NewLine, "\\r\\n");
     }
 
     public static string ToPropertyName(ReadOnlySpan<char> span)

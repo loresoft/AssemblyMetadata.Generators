@@ -16,13 +16,4 @@ public class PropertyNameTests
         var actual = AssemblyMetadataWriter.ToPropertyName(input);
         Assert.Equal(expected, actual);
     }
-
-    [Theory]
-    [InlineData("Name\\Test", "Name\\\\Test")]
-    [InlineData("Name\"Test\"", "Name\\\"Test\\\"")]
-    public void SafeValue(string input, string expected)
-    {
-        var actual = AssemblyMetadataWriter.SafeValue(input);
-        Assert.Equal(expected, actual);
-    }
 }

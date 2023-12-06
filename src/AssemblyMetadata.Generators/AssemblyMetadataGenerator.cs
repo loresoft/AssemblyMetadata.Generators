@@ -3,6 +3,7 @@ using System.Resources;
 using System.Runtime.Versioning;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace AssemblyMetadata.Generators;
@@ -83,7 +84,7 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
                     name = name.Substring(0, name.Length - 9);
 
                 var argument = attribute.ConstructorArguments.FirstOrDefault();
-                var value = argument.Value?.ToString() ?? string.Empty;
+                var value = argument.ToCSharpString() ?? string.Empty;
 
                 if (string.IsNullOrWhiteSpace(value))
                     continue;
@@ -97,7 +98,7 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
                 var key = nameArgument.Value?.ToString() ?? string.Empty;
 
                 var valueArgument = attribute.ConstructorArguments[1];
-                var value = valueArgument.Value?.ToString() ?? string.Empty;
+                var value = valueArgument.ToCSharpString() ?? string.Empty;
 
                 if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
                     continue;

@@ -10,6 +10,8 @@ internal static partial class ThisAssembly
 
     public const string HardKey = "HardValue";
 
+    public const string VerifyTargetFrameworks = "";
+
     public const string VerifyProjectDirectory = "D:\\Projects\\GitHub\\AssemblyMetadata.Generators\\test\\AssemblyMetadata.Generators.Tests\\";
 
     public const string VerifySolutionDirectory = "D:\\Projects\\GitHub\\AssemblyMetadata.Generators\\";
