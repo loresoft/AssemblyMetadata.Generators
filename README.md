@@ -6,6 +6,8 @@ Source generator to expose assembly attributes as string constants.
 
 [![NuGet Version](https://img.shields.io/nuget/v/AssemblyMetadata.Generators.svg?style=flat-square)](https://www.nuget.org/packages/AssemblyMetadata.Generators/)
 
+[![Coverage Status](https://coveralls.io/repos/github/loresoft/AssemblyMetadata.Generators/badge.svg?branch=main)](https://coveralls.io/github/loresoft/AssemblyMetadata.Generators?branch=main)
+
 ### Usage
 
 #### Add package
