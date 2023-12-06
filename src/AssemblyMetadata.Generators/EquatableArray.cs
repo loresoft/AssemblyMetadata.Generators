@@ -1,8 +1,10 @@
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssemblyMetadata.Generators;
 
-public readonly struct EquatableArray<T> : IEquatable<EquatableArray<T>>, IEnumerable<T>
+[ExcludeFromCodeCoverage]
+public readonly struct EquatableArray<T> : IReadOnlyCollection<T>, IEquatable<EquatableArray<T>>
     where T : IEquatable<T>
 {
     public static readonly EquatableArray<T> Empty = new(Array.Empty<T>());
@@ -14,7 +16,7 @@ public readonly struct EquatableArray<T> : IEquatable<EquatableArray<T>>, IEnume
         _array = array;
     }
 
-    public EquatableArray(IEnumerable<T> array)
+    public EquatableArray(IEnumerable<T>? array)
     {
         array ??= Enumerable.Empty<T>();
         _array = array.ToArray();
@@ -35,12 +37,7 @@ public readonly struct EquatableArray<T> : IEquatable<EquatableArray<T>>, IEnume
         if (_array is null)
             return 0;
 
-        HashCode hashCode = default;
-
-        foreach (T item in _array)
-            hashCode.Add(item);
-
-        return hashCode.ToHashCode();
+        return HashCode.Seed.CombineAll(_array);
     }
 
     public ReadOnlySpan<T> AsSpan()
@@ -50,12 +47,14 @@ public readonly struct EquatableArray<T> : IEquatable<EquatableArray<T>>, IEnume
 
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
-        return ((IEnumerable<T>)(_array ?? Array.Empty<T>())).GetEnumerator();
+        IEnumerable<T> array = _array ?? Array.Empty<T>();
+        return array.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return ((IEnumerable<T>)(_array ?? Array.Empty<T>())).GetEnumerator();
+        IEnumerable<T> array = _array ?? Array.Empty<T>();
+        return array.GetEnumerator();
     }
 
     public int Count => _array?.Length ?? 0;

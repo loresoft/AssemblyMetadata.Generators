@@ -83,7 +83,10 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
                     name = name.Substring(0, name.Length - 9);
 
                 var argument = attribute.ConstructorArguments.FirstOrDefault();
-                var value = argument.Value as string;
+                var value = argument.Value?.ToString() ?? string.Empty;
+
+                if (string.IsNullOrWhiteSpace(value))
+                    continue;
 
                 var constant = new AssemblyConstant(name, value);
                 constants.Add(constant);
@@ -91,10 +94,17 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
             else if (name == nameof(AssemblyMetadataAttribute) && attribute.ConstructorArguments.Length == 2)
             {
                 var nameArgument = attribute.ConstructorArguments[0];
-                var key = nameArgument.Value as string;
+                var key = nameArgument.Value?.ToString() ?? string.Empty;
 
                 var valueArgument = attribute.ConstructorArguments[1];
-                var value = valueArgument.Value as string;
+                var value = valueArgument.Value?.ToString() ?? string.Empty;
+
+                if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+                    continue;
+
+                // prevent duplicates
+                if (constants.Any(c => c.Name == key))
+                    continue;
 
                 var constant = new AssemblyConstant(key, value);
                 constants.Add(constant);

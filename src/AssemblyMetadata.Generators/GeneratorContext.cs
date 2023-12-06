@@ -1,7 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis;
 
 namespace AssemblyMetadata.Generators;
 
+[ExcludeFromCodeCoverage]
 public class GeneratorContext : IEquatable<GeneratorContext>
 {
     public GeneratorContext(IEnumerable<Diagnostic> diagnostics, IEnumerable<AssemblyConstant> constants)
@@ -28,7 +31,7 @@ public class GeneratorContext : IEquatable<GeneratorContext>
 
     public override bool Equals(object value) => value is GeneratorContext context && Equals(context);
 
-    public override int GetHashCode() => HashCode.Combine(Diagnostics, Constants);
+    public override int GetHashCode() => HashCode.Seed.CombineAll(Diagnostics).CombineAll(Constants);
 
     public static bool operator ==(GeneratorContext left, GeneratorContext right) => Equals(left, right);
 

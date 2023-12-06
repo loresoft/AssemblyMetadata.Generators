@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace AssemblyMetadata.Generators;
 
+[ExcludeFromCodeCoverage]
 public class AssemblyConstant : IEquatable<AssemblyConstant>
 {
     public AssemblyConstant(string name, string value)
@@ -26,7 +29,7 @@ public class AssemblyConstant : IEquatable<AssemblyConstant>
 
     public override bool Equals(object value) => value is AssemblyConstant assemblyContant && Equals(assemblyContant);
 
-    public override int GetHashCode() => HashCode.Combine(Name, Value);
+    public override int GetHashCode() => HashCode.Seed.Combine(Name).Combine(Value);
 
     public static bool operator ==(AssemblyConstant left, AssemblyConstant right) => Equals(left, right);
 

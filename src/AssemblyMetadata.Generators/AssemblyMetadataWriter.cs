@@ -1,7 +1,16 @@
+using System.Reflection;
+
 namespace AssemblyMetadata.Generators;
 
 public static class AssemblyMetadataWriter
 {
+    private static readonly Lazy<string> _informationVersion = new(() =>
+    {
+        var assembly = typeof(AssemblyMetadataWriter).Assembly;
+        var attribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        return attribute?.InformationalVersion ?? "1.0.0.0";
+    });
+
     public static string Generate(EquatableArray<AssemblyConstant> constants)
     {
         if (constants == null)
@@ -18,10 +27,10 @@ public static class AssemblyMetadataWriter
             .AppendLine("/// </summary>");
 
         codeBuilder
-            .Append("[global::System.CodeDom.Compiler.GeneratedCode(\"")
+            .Append("[global::System.CodeDom.Compiler.GeneratedCodeAttribute(\"")
             .Append("AssemblyMetadata.Generators")
             .Append("\", \"")
-            .Append("1.0.0.0")
+            .Append(_informationVersion.Value)
             .AppendLine("\")]");
 
         codeBuilder
@@ -53,12 +62,12 @@ public static class AssemblyMetadataWriter
         return codeBuilder.ToString();
     }
 
-    private static string SafeName(string name)
+    public static string SafeName(string name)
     {
         return ToPropertyName(name.AsSpan());
     }
 
-    private static string SafeValue(string value)
+    public static string SafeValue(string value)
     {
         return value
             .Replace("\\", "\\\\")
@@ -66,7 +75,7 @@ public static class AssemblyMetadataWriter
             .Replace(Environment.NewLine, "\\r\\n");
     }
 
-    private static string ToPropertyName(ReadOnlySpan<char> span)
+    public static string ToPropertyName(ReadOnlySpan<char> span)
     {
         if (span.IsEmpty)
             return string.Empty;
