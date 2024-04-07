@@ -11,8 +11,8 @@ namespace AssemblyMetadata.Generators;
 [Generator(LanguageNames.CSharp)]
 public class AssemblyMetadataGenerator : IIncrementalGenerator
 {
-    private static readonly HashSet<string> _attributes = new()
-    {
+    private static readonly HashSet<string> _attributes =
+    [
         nameof(AssemblyCompanyAttribute),
         nameof(AssemblyConfigurationAttribute),
         nameof(AssemblyCopyrightAttribute),
@@ -31,7 +31,8 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
         nameof(AssemblyVersionAttribute),
         nameof(NeutralResourcesLanguageAttribute),
         nameof(TargetFrameworkAttribute),
-    };
+        "UserSecretsIdAttribute"
+    ];
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {

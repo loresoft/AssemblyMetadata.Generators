@@ -7,7 +7,6 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace AssemblyMetadata.Generators.Tests;
 
-[UsesVerify]
 public class GeneratorTests
 {
     [Fact]
