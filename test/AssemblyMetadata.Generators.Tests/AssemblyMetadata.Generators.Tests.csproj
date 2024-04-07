@@ -44,7 +44,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="MinVer" Version="5.0.0" PrivateAssets="All" />
     <PackageReference Include="Verify.Xunit" Version="23.2.2" />
     <PackageReference Include="xunit" Version="2.6.2" />
