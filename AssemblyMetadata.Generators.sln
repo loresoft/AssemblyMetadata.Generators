@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
+# 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyMetadata.Generators", "src\AssemblyMetadata.Generators\AssemblyMetadata.Generators.csproj", "{57C67863-03B3-4E43-8881-7B19A5657FE0}"
@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{1BA030F4-6549-4F95-ACEA-80E992C519BD}"
 	ProjectSection(SolutionItems) = preProject
 		coverlet.runsettings = coverlet.runsettings
+		.github\dependabot.yml = .github\dependabot.yml
 		src\Directory.Build.props = src\Directory.Build.props
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		README.md = README.md

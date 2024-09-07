@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.Versioning;
@@ -36,6 +37,7 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
+
         var provider = context.SyntaxProvider
             .ForAttributeWithMetadataName(
                 fullyQualifiedMetadataName: "System.Reflection.AssemblyVersionAttribute",
@@ -50,11 +52,23 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
 
         context.RegisterSourceOutput(diagnostics, ReportDiagnostic);
 
-        IncrementalValuesProvider<EquatableArray<AssemblyConstant>> constants = provider
+        var constants = provider
             .Select(static (item, _) => item.Constants)
             .Where(static item => item.Count > 0);
 
-        context.RegisterSourceOutput(constants, GenerateOutput);
+        var assemblyName = context.CompilationProvider
+            .Select(static (c, _) => c.AssemblyName);
+
+        var thisNamespace = context.AnalyzerConfigOptionsProvider
+            .Select(static (c, _) =>
+            {
+                c.GlobalOptions.TryGetValue("build_property.ThisAssemblyNamespace", out var methodName);
+                return methodName;
+            });
+
+        var options = assemblyName.Combine(thisNamespace);
+
+        context.RegisterSourceOutput(constants.Combine(options), GenerateOutput);
     }
 
     private static bool SyntacticPredicate(SyntaxNode syntaxNode, CancellationToken cancellationToken)
@@ -122,9 +136,9 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
             context.ReportDiagnostic(diagnostic);
     }
 
-    private void GenerateOutput(SourceProductionContext context, EquatableArray<AssemblyConstant> constants)
+    private void GenerateOutput(SourceProductionContext context, (EquatableArray<AssemblyConstant> constants, (string? assemblyName, string? thisNamespace) options) parameters)
     {
-        var source = AssemblyMetadataWriter.Generate(constants);
+        var source = AssemblyMetadataWriter.Generate(parameters.constants, parameters.options.assemblyName, parameters.options.thisNamespace);
 
         context.AddSource("AssemblyMetadata.g.cs", source);
     }
