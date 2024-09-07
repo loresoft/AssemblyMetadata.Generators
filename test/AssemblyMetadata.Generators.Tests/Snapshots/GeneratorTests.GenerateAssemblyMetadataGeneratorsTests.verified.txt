@@ -3,8 +3,6 @@
 /// <summary>
 /// Assembly attributes exposed as public constants
 /// </summary>
-[global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-[global::System.Diagnostics.DebuggerStepThroughAttribute]
 internal static partial class ThisAssembly
 {
 
