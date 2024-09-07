@@ -37,3 +37,15 @@ internal static partial class ThisAssembly
     public const string NeutralResourcesLanguage = "en-US";
 }
 ```
+
+### Namespace
+
+Set the `ThisAssemblyNamespace` MSBuild property to set the namespace of the generated `ThisAssembly` class. Otherwise, it will be in the global namespace.
+
+Put `ThisAssembly` in the projects root namespace.
+
+```xml
+<PropertyGroup>
+  <ThisAssemblyNamespace>$(RootNamespace)</ThisAssemblyNamespace>
+</PropertyGroup>
+```

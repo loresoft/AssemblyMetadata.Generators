@@ -43,8 +43,6 @@ public static class AssemblyMetadataWriter
             .AppendLine("\")]");
 
         codeBuilder
-            .AppendLine("[global::System.Diagnostics.DebuggerNonUserCodeAttribute]")
-            .AppendLine("[global::System.Diagnostics.DebuggerStepThroughAttribute]")
             .AppendLine("internal static partial class ThisAssembly")
             .AppendLine("{")
             .IncrementIndent()
