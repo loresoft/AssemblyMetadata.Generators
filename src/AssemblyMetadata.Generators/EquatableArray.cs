@@ -4,68 +4,61 @@ using System.Diagnostics.CodeAnalysis;
 namespace AssemblyMetadata.Generators;
 
 [ExcludeFromCodeCoverage]
-public readonly struct EquatableArray<T> : IReadOnlyCollection<T>, IEquatable<EquatableArray<T>>
+public readonly struct EquatableArray<T> : IEquatable<EquatableArray<T>>, IEnumerable<T>
     where T : IEquatable<T>
 {
-    public static readonly EquatableArray<T> Empty = new(Array.Empty<T>());
+    public static readonly EquatableArray<T> Empty = new();
 
-    private readonly T[] _array;
 
-    public EquatableArray(T[] array)
+    public EquatableArray() : this([]) { }
+
+    public EquatableArray(T[] array) => Array = array ?? [];
+
+    public EquatableArray(IEnumerable<T> items) => Array = items.ToArray() ?? [];
+
+
+    public T[] Array { get; }
+
+    public int Count => Array.Length;
+
+
+    public ReadOnlySpan<T> AsSpan() => Array.AsSpan();
+
+    public T[] AsArray() => Array;
+
+    public T this[int i]
     {
-        _array = array;
+        get => Array[i];
     }
 
-    public EquatableArray(IEnumerable<T>? array)
-    {
-        array ??= Enumerable.Empty<T>();
-        _array = array.ToArray();
-    }
+    public static bool operator ==(EquatableArray<T> left, EquatableArray<T> right) => left.Equals(right);
 
-    public bool Equals(EquatableArray<T> array)
-    {
-        return AsSpan().SequenceEqual(array.AsSpan());
-    }
+    public static bool operator !=(EquatableArray<T> left, EquatableArray<T> right) => !left.Equals(right);
 
-    public override bool Equals(object obj)
-    {
-        return obj is EquatableArray<T> array && Equals(this, array);
-    }
+    public bool Equals(EquatableArray<T> array) => Array.AsSpan().SequenceEqual(array.AsSpan());
+
+    public override bool Equals(object? obj) => obj is EquatableArray<T> array && Equals(this, array);
 
     public override int GetHashCode()
     {
-        if (_array is null)
+        if (Array is not T[] array)
             return 0;
 
-        return HashCode.Seed.CombineAll(_array);
+        var hashCode = 16777619;
+
+        for (int i = 0; i < array.Length; i++)
+            hashCode = unchecked((hashCode * -1521134295) + EqualityComparer<T>.Default.GetHashCode(array[i]));
+
+        return hashCode;
     }
 
-    public ReadOnlySpan<T> AsSpan()
-    {
-        return _array.AsSpan();
-    }
 
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
-    {
-        IEnumerable<T> array = _array ?? Array.Empty<T>();
-        return array.GetEnumerator();
-    }
+    IEnumerator<T> IEnumerable<T>.GetEnumerator() => (Array as IEnumerable<T>).GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        IEnumerable<T> array = _array ?? Array.Empty<T>();
-        return array.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => Array.GetEnumerator();
 
-    public int Count => _array?.Length ?? 0;
 
-    public static bool operator ==(EquatableArray<T> left, EquatableArray<T> right)
-    {
-        return left.Equals(right);
-    }
+    public static implicit operator EquatableArray<T>(T[] array) => new(array);
 
-    public static bool operator !=(EquatableArray<T> left, EquatableArray<T> right)
-    {
-        return !left.Equals(right);
-    }
+    public static implicit operator EquatableArray<T>(List<T> items) => new(items);
 }

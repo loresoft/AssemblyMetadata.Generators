@@ -11,9 +11,9 @@ public static class AssemblyMetadataWriter
         return attribute?.InformationalVersion ?? "1.0.0.0";
     });
 
-    public static string Generate(EquatableArray<AssemblyConstant> constants, string? assemblyName = null, string? thisNamespace = null)
+    public static string Generate(IEnumerable<AssemblyConstant> constants, string? thisNamespace = null)
     {
-        if (constants == null)
+        if (constants is null)
             throw new ArgumentNullException(nameof(constants));
 
         var codeBuilder = new IndentedStringBuilder();
@@ -47,15 +47,6 @@ public static class AssemblyMetadataWriter
             .AppendLine("{")
             .IncrementIndent()
             .AppendLine();
-
-        if (!string.IsNullOrEmpty(assemblyName))
-        {
-            codeBuilder
-                .Append("public const string AssemblyName = \"")
-                .Append(assemblyName)
-                .AppendLine("\";")
-                .AppendLine();
-        }
 
         foreach (var constant in constants)
         {

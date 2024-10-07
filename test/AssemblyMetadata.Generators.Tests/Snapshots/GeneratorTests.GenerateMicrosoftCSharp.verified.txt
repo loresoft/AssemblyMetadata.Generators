@@ -6,8 +6,6 @@
 internal static partial class ThisAssembly
 {
 
-    public const string AssemblyName = "Test.Generator";
-
     public const string TargetFramework = ".NETCoreApp,Version=v8.0";
 
     public const string Serviceable = "True";
@@ -35,5 +33,7 @@ internal static partial class ThisAssembly
     public const string RepositoryUrl = "https://github.com/dotnet/runtime";
 
     public const string Version = "8.0.0.0";
+
+    public const string AssemblyName = "Test.Generator";
 
 }

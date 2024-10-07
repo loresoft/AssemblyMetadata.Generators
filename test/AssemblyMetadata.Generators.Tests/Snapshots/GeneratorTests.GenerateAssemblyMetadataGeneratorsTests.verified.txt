@@ -6,8 +6,6 @@
 internal static partial class ThisAssembly
 {
 
-    public const string AssemblyName = "Test.Generator";
-
     public const string HardKey = "HardValue";
 
     public const string VerifyTargetFrameworks = "";
@@ -39,5 +37,7 @@ internal static partial class ThisAssembly
     public const string NeutralResourcesLanguage = "en-US";
 
     public const string Version = "1.0.0.0";
+
+    public const string AssemblyName = "Test.Generator";
 
 }

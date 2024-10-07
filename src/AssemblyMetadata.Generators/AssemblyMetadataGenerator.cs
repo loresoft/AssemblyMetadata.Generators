@@ -59,14 +59,24 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
         var assemblyName = context.CompilationProvider
             .Select(static (c, _) => c.AssemblyName);
 
-        var thisNamespace = context.AnalyzerConfigOptionsProvider
+        var globalOptions = context.AnalyzerConfigOptionsProvider
             .Select(static (c, _) =>
             {
-                c.GlobalOptions.TryGetValue("build_property.ThisAssemblyNamespace", out var methodName);
-                return methodName;
+                c.GlobalOptions.TryGetValue("build_property.AssemblyName", out var assemblyName);
+                c.GlobalOptions.TryGetValue("build_property.DefineConstants", out var defineConstants);
+                c.GlobalOptions.TryGetValue("build_property.RootNamespace", out var rootNamespace);
+                c.GlobalOptions.TryGetValue("build_property.ThisAssemblyNamespace", out var thisNamespace);
+
+                var globalOptions = new GlobalOptions(
+                    AssemblyName: assemblyName,
+                    DefineConstants: defineConstants,
+                    RootNamespace: rootNamespace,
+                    ThisAssemblyNamespace: thisNamespace);
+
+                return globalOptions;
             });
 
-        var options = assemblyName.Combine(thisNamespace);
+        var options = assemblyName.Combine(globalOptions);
 
         context.RegisterSourceOutput(constants.Combine(options), GenerateOutput);
     }
@@ -127,7 +137,7 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
             }
         }
 
-        return new GeneratorContext(Enumerable.Empty<Diagnostic>(), constants);
+        return new GeneratorContext([], constants);
     }
 
     private static void ReportDiagnostic(SourceProductionContext context, EquatableArray<Diagnostic> diagnostics)
@@ -136,9 +146,32 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
             context.ReportDiagnostic(diagnostic);
     }
 
-    private void GenerateOutput(SourceProductionContext context, (EquatableArray<AssemblyConstant> constants, (string? assemblyName, string? thisNamespace) options) parameters)
+    private void GenerateOutput(SourceProductionContext context, (EquatableArray<AssemblyConstant> constants, (string? assemblyName, GlobalOptions globalOptions) options) parameters)
     {
-        var source = AssemblyMetadataWriter.Generate(parameters.constants, parameters.options.assemblyName, parameters.options.thisNamespace);
+
+        var constants = new List<AssemblyConstant>(parameters.constants);
+
+        if (!constants.Any(p => p.Name == nameof(GlobalOptions.AssemblyName)))
+        {
+            var assemblyName = parameters.options.globalOptions.AssemblyName ?? parameters.options.assemblyName ?? string.Empty;
+            constants.Add(new AssemblyConstant(nameof(GlobalOptions.AssemblyName), $"\"{assemblyName}\""));
+        }
+
+        if (!constants.Any(p => p.Name == nameof(GlobalOptions.DefineConstants)))
+        {
+            var defineConstants = parameters.options.globalOptions.DefineConstants;
+            if (!string.IsNullOrEmpty(defineConstants))
+                constants.Add(new AssemblyConstant(nameof(GlobalOptions.DefineConstants), $"\"{defineConstants}\""!));
+        }
+
+        if (!constants.Any(p => p.Name == nameof(GlobalOptions.RootNamespace)))
+        {
+            var rootNamespace = parameters.options.globalOptions.RootNamespace;
+            if (!string.IsNullOrEmpty(rootNamespace))
+                constants.Add(new AssemblyConstant(nameof(GlobalOptions.RootNamespace), $"\"{rootNamespace}\""!));
+        }
+
+        var source = AssemblyMetadataWriter.Generate(constants, parameters.options.globalOptions.ThisAssemblyNamespace);
 
         context.AddSource("AssemblyMetadata.g.cs", source);
     }
