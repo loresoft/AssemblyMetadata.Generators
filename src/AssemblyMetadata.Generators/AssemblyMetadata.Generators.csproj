@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="5.3.0" />
     <None Include="$(OutputPath)\$(AssemblyName).dll" PackagePath="analyzers/dotnet/roslyn4.4/cs" Pack="true" Visible="false" />
     <None Include="$(AssemblyName).targets" PackagePath="build" Pack="true" Visible="true" />
   </ItemGroup>
