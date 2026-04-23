@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Build/">
+    <File Path=".github/workflows/dotnet.yml" />
+    <File Path="Directory.Packages.props" />
+    <File Path="README.md" />
+    <File Path="src/Directory.Build.props" />
+  </Folder>
+  <Project Path="src/AssemblyMetadata.Generators/AssemblyMetadata.Generators.csproj" />
+  <Project Path="test/AssemblyMetadata.Generators.Tests/AssemblyMetadata.Generators.Tests.csproj" />
+</Solution>

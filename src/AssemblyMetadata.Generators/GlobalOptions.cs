@@ -1,8 +1,12 @@
 namespace AssemblyMetadata.Generators;
 
-public record GlobalOptions(
+public readonly record struct GlobalOptions(
     string? AssemblyName,
     string? DefineConstants,
     string? RootNamespace,
-    string? ThisAssemblyNamespace
+    string? ThisAssemblyNamespace,
+    string? PackageVersion,
+    string? PackageId,
+    string? RepositoryBranch,
+    string? RepositoryCommit
 );

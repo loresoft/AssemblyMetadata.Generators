@@ -1,4 +1,5 @@
-using System.Collections.Immutable;
+// Ignore Spelling: Metadata
+
 using System.Reflection;
 using System.Resources;
 using System.Runtime.Versioning;
@@ -44,20 +45,17 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
                 predicate: SyntacticPredicate,
                 transform: SemanticTransform
             )
-            .Where(static context => context is not null);
-
-        var diagnostics = provider
-            .Select(static (item, _) => item.Diagnostics)
-            .Where(static item => item.Count > 0);
-
-        context.RegisterSourceOutput(diagnostics, ReportDiagnostic);
+            .Where(static context => context.Constants.Count > 0)
+            .WithTrackingName("AssemblyAttributes");
 
         var constants = provider
             .Select(static (item, _) => item.Constants)
-            .Where(static item => item.Count > 0);
+            .Where(static item => item.Count > 0)
+            .WithTrackingName("Constants");
 
         var assemblyName = context.CompilationProvider
-            .Select(static (c, _) => c.AssemblyName);
+            .Select(static (c, _) => c.AssemblyName)
+            .WithTrackingName("AssemblyName");
 
         var globalOptions = context.AnalyzerConfigOptionsProvider
             .Select(static (c, _) =>
@@ -66,17 +64,27 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
                 c.GlobalOptions.TryGetValue("build_property.DefineConstants", out var defineConstants);
                 c.GlobalOptions.TryGetValue("build_property.RootNamespace", out var rootNamespace);
                 c.GlobalOptions.TryGetValue("build_property.ThisAssemblyNamespace", out var thisNamespace);
+                c.GlobalOptions.TryGetValue("build_property.PackageVersion", out var packageVersion);
+                c.GlobalOptions.TryGetValue("build_property.PackageId", out var packageId);
+                c.GlobalOptions.TryGetValue("build_property.RepositoryBranch", out var repositoryBranch);
+                c.GlobalOptions.TryGetValue("build_property.RepositoryCommit", out var repositoryCommit);
 
                 var globalOptions = new GlobalOptions(
                     AssemblyName: assemblyName,
                     DefineConstants: defineConstants,
                     RootNamespace: rootNamespace,
-                    ThisAssemblyNamespace: thisNamespace);
+                    ThisAssemblyNamespace: thisNamespace,
+                    PackageVersion: packageVersion,
+                    PackageId: packageId,
+                    RepositoryBranch: repositoryBranch,
+                    RepositoryCommit: repositoryCommit);
 
                 return globalOptions;
-            });
+            })
+            .WithTrackingName("GlobalOptions");
 
-        var options = assemblyName.Combine(globalOptions);
+        var options = assemblyName.Combine(globalOptions)
+            .WithTrackingName("Options");
 
         context.RegisterSourceOutput(constants.Combine(options), GenerateOutput);
     }
@@ -137,13 +145,7 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
             }
         }
 
-        return new GeneratorContext([], constants);
-    }
-
-    private static void ReportDiagnostic(SourceProductionContext context, EquatableArray<Diagnostic> diagnostics)
-    {
-        foreach (var diagnostic in diagnostics)
-            context.ReportDiagnostic(diagnostic);
+        return new GeneratorContext(constants);
     }
 
     private void GenerateOutput(SourceProductionContext context, (EquatableArray<AssemblyConstant> constants, (string? assemblyName, GlobalOptions globalOptions) options) parameters)
@@ -161,14 +163,42 @@ public class AssemblyMetadataGenerator : IIncrementalGenerator
         {
             var defineConstants = parameters.options.globalOptions.DefineConstants;
             if (!string.IsNullOrEmpty(defineConstants))
-                constants.Add(new AssemblyConstant(nameof(GlobalOptions.DefineConstants), $"\"{defineConstants}\""!));
+                constants.Add(new AssemblyConstant(nameof(GlobalOptions.DefineConstants), $"\"{defineConstants}\""));
         }
 
         if (!constants.Any(p => p.Name == nameof(GlobalOptions.RootNamespace)))
         {
             var rootNamespace = parameters.options.globalOptions.RootNamespace;
             if (!string.IsNullOrEmpty(rootNamespace))
-                constants.Add(new AssemblyConstant(nameof(GlobalOptions.RootNamespace), $"\"{rootNamespace}\""!));
+                constants.Add(new AssemblyConstant(nameof(GlobalOptions.RootNamespace), $"\"{rootNamespace}\""));
+        }
+
+        if (!constants.Any(p => p.Name == nameof(GlobalOptions.PackageVersion)))
+        {
+            var packageVersion = parameters.options.globalOptions.PackageVersion;
+            if (!string.IsNullOrEmpty(packageVersion))
+                constants.Add(new AssemblyConstant(nameof(GlobalOptions.PackageVersion), $"\"{packageVersion}\""));
+        }
+
+        if (!constants.Any(p => p.Name == nameof(GlobalOptions.PackageId)))
+        {
+            var packageId = parameters.options.globalOptions.PackageId;
+            if (!string.IsNullOrEmpty(packageId))
+                constants.Add(new AssemblyConstant(nameof(GlobalOptions.PackageId), $"\"{packageId}\""));
+        }
+
+        if (!constants.Any(p => p.Name == nameof(GlobalOptions.RepositoryBranch)))
+        {
+            var repositoryBranch = parameters.options.globalOptions.RepositoryBranch;
+            if (!string.IsNullOrEmpty(repositoryBranch))
+                constants.Add(new AssemblyConstant(nameof(GlobalOptions.RepositoryBranch), $"\"{repositoryBranch}\""));
+        }
+
+        if (!constants.Any(p => p.Name == nameof(GlobalOptions.RepositoryCommit)))
+        {
+            var repositoryCommit = parameters.options.globalOptions.RepositoryCommit;
+            if (!string.IsNullOrEmpty(repositoryCommit))
+                constants.Add(new AssemblyConstant(nameof(GlobalOptions.RepositoryCommit), $"\"{repositoryCommit}\""));
         }
 
         var source = AssemblyMetadataWriter.Generate(constants, parameters.options.globalOptions.ThisAssemblyNamespace);

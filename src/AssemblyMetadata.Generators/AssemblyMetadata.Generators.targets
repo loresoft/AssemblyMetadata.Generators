@@ -2,6 +2,10 @@
   <ItemGroup>
     <CompilerVisibleProperty Include="AssemblyName" />
     <CompilerVisibleProperty Include="DefineConstants" />
+    <CompilerVisibleProperty Include="PackageId" />
+    <CompilerVisibleProperty Include="PackageVersion" />
+    <CompilerVisibleProperty Include="RepositoryBranch" />
+    <CompilerVisibleProperty Include="RepositoryCommit" />
     <CompilerVisibleProperty Include="RootNamespace" />
     <CompilerVisibleProperty Include="ThisAssemblyNamespace" />
   </ItemGroup>

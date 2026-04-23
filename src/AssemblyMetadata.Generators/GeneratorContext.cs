@@ -1,8 +1,5 @@
-using Microsoft.CodeAnalysis;
-
 namespace AssemblyMetadata.Generators;
 
-public record GeneratorContext(
-    EquatableArray<Diagnostic> Diagnostics,
+public readonly record struct GeneratorContext(
     EquatableArray<AssemblyConstant> Constants
 );
