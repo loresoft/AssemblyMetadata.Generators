@@ -9,4 +9,32 @@
     <CompilerVisibleProperty Include="RootNamespace" />
     <CompilerVisibleProperty Include="ThisAssemblyNamespace" />
   </ItemGroup>
+
+  <Target Name="AssemblyMetadataResolvePackageVersion"
+          BeforeTargets="CoreCompile"
+          DependsOnTargets="$(AssemblyMetadataResolvePackageVersionDependsOn)"
+          Condition="'$(PackageVersion)' == ''">
+    <PropertyGroup>
+      <PackageVersion Condition="'$(Version)' != ''">$(Version)</PackageVersion>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="AssemblyMetadataResolveRepositoryInfo"
+          BeforeTargets="CoreCompile"
+          Condition="'$(RepositoryCommit)' == '' Or '$(RepositoryBranch)' == ''">
+    <Exec Command="git rev-parse HEAD"
+          ConsoleToMSBuild="true"
+          StandardOutputImportance="low"
+          IgnoreExitCode="true"
+          Condition="'$(RepositoryCommit)' == ''">
+      <Output TaskParameter="ConsoleOutput" PropertyName="RepositoryCommit" />
+    </Exec>
+    <Exec Command="git rev-parse --abbrev-ref HEAD"
+          ConsoleToMSBuild="true"
+          StandardOutputImportance="low"
+          IgnoreExitCode="true"
+          Condition="'$(RepositoryBranch)' == ''">
+      <Output TaskParameter="ConsoleOutput" PropertyName="RepositoryBranch" />
+    </Exec>
+  </Target>
 </Project>
